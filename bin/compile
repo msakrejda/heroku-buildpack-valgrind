@@ -63,4 +63,4 @@ fi
 
 log "Setting up environment"
 mkdir -p $build_dir/.profile.d
-cp ${bp_dir}/.profile.d/* $build_dir/.profile.d
+cp ${bp_dir}/.profile.d/valgrind.sh $build_dir/.profile.d
