@@ -25,7 +25,7 @@ index 9d7d0d2..d5f3106 100644
 @@ -1,2 +1,2 @@
 -web: node static/server.js
 +web: valgrind node static/server.js
-maciek@mothra:~/code/my-app git commit Procfile -m "Run under valgrind"
+maciek@mothra:~/code/my-app$ git commit Procfile -m "Run under valgrind"
 ```
 
 Then tail your application logs
