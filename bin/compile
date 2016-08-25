@@ -46,6 +46,7 @@ then
     log_aux "Extracting"
     ar vx libc6-dbg_${libc6_dbg_version}_amd64.deb
     libc6_tar=$(readlink -f data.tar.xz)
+    mkdir -p $build_dir/.valgrind/libc6-dbg
     cd $build_dir/.valgrind/libc6-dbg
     tar xJvf $libc6_tar
 else
