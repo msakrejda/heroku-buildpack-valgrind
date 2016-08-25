@@ -6,6 +6,8 @@ build_dir=${1:-}
 cache_dir=${2:-}
 env_dir=${3:-}
 
+bp_dir="$(dirname $0)/.."
+
 version=3.11.0
 libc6_dbg_version=2.19-0ubuntu6.9
 
@@ -58,3 +60,7 @@ else
     cd $build_dir/.valgrind/libc6-dbg
     tar xJvf $cache_dir/valgrind/libc6-dbg-${libc6_dbg_version}/data.tar.xz
 fi
+
+log "Setting up environment"
+mkdir -p $build_dir/.profile.d
+cp ${bp_dir}/.profile.d/* $build_dir/.profile.d
