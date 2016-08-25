@@ -55,7 +55,9 @@ prefixed.
 
 Note that Valgrind will considerably slow down your application, to
 the point you may hit the Heroku [boot timeout][boot-timeout]. You may
-need to contact Support to have the limit increased.
+need to contact Support to have the limit increased (and after the
+limit is increased, you may need to deploy a new version of your app
+for it to pick up the new boot timeout).
 
 ## THIS IS BETA SOFTWARE
 
