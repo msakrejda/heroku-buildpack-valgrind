@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -eux
+
+build_dir=${0:-}
+cache_dir=${1:-}
+env_dir=${2:-}
+
+version=3.11.0
+libc6_dbg_version=2.19-0ubuntu6.9
+
+log() {
+    echo "-----> $1"
+}
+
+log_aux() {
+    echo "       $1"
+}
+
+if [ ! -d $cache_dir/valgrind/$version ]
+then
+    rm -rf $cache_dir/valgrind
+    mkdir -p $cache_dir/valgrind
+    cd  $cache_dir/valgrind
+
+    log "Downloading valgrind ${version}"
+    wget http://valgrind.org/downloads/valgrind-${version}.tar.bz2
+    log_aux "Extracting"
+    tar xjvf valgrind-${version}.tar.bz2
+    pushd valgrind-${version}
+    mkdir -p $build_dir/.valgrind/install /app/.valgrind
+    ln -s $build_dir/.valgrind/install /app/.valgrind/install
+    log_aux "Configuring"
+    ./configure --prefix=/app/.valgrind/install
+    log_aux "Building"
+    make
+    log_aux "Installing"
+    make install
+    cp -r $build_dir/.valgrind/install $cache_dir/valgrind/$version
+    popd
+
+    log "Downloading libc6-dbg ${libc6_dbg_version}"
+    mkdir libc6-dbg-${libc6_dbg_version}
+    pushd libc6-dbg-${libc6_dbg_version}
+    wget http://security.ubuntu.com/ubuntu/pool/main/e/eglibc/libc6-dbg_${libc6_dbg_version}_amd64.deb
+    log_aux "Extracting"
+    ar vx libc6-dbg_${libc6_dbg_version}_amd64.deb
+    libc6_tar=$(readlink -f data.tar.xz)
+    cd $build_dir/.valgrind/libc6-dbg
+    tar xJvf $libc6_tar
+else
+    log "Setting up valgrind"
+    mkdir -p $build_dir/.valgrind/install
+    mkdir -p $build_dir/.valgrind/libc6-dbg
+    cp -r $cache_dir/valgrind/$version/* $build_dir/.valgrind/install
+    log "Setting up libc6-dbg"
+    cd $build_dir/.valgrind/libc6-dbg
+    tar xJvf $cache_dir/valgrind/libc6-dbg-${libc6_dbg_version}/data.tar.xz
+fi
